@@ -152,7 +152,11 @@ set loadpath
 set fontpath 
 set psdir
 set fit noerrorvariables noprescale
-f(x) = alpha + beta * x
 GNUTERM = "aqua"
+
+set terminal png size 800,600 enhanced font "Helvetica,12"
+set output 'compare.png'
+
 plot "bcast-alg1.tsv" using 2:3 title "Algorithm 1", "bcast-alg2.tsv" using 2:3 title "Algorithm 2"
+
 #    EOF

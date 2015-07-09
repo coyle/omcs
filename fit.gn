@@ -152,10 +152,13 @@ set loadpath
 set fontpath 
 set psdir
 set fit noerrorvariables noprescale
-f(x) = alpha + beta * x
-GNUTERM = "aqua"
-alpha = -2.92E-05
-beta = 1.04E-09
-GPFUN_f = "f(x) = alpha + beta * x"
-plot "serial.tsv" using 2:3 title "Serial", f(x) title "Fit"
+#f(x) = alpha + beta * x
+#GNUTERM = "aqua"
+#alpha = -2.92E-05
+#beta = 1.04E-09
+#GPFUN_f = "f(x) = alpha + beta * x"
+#plot "serial.tsv" using 2:3 title "Serial", f(x) title "Fit"
+set terminal png size 800,600 enhanced font "Helvetica,12"
+set output 'fit.png'
+plot "serial.tsv" using 2:3 title "Serial"
 #    EOF
