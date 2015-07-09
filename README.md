@@ -16,7 +16,7 @@ Your first task is to implement the following collectives
 Begin by obtaining the starter code from the github repository.
 
 <pre><code>
-	git clone .....
+	git clone https://github.gatech.edu/sb300/oms-hpc-lab2.git
 </code></pre>
 
 should do the trick.  This will create clone of the repository on your local machine.  You should then modify the files and submit them to Udacity as described below.
