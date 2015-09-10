@@ -1,19 +1,9 @@
-#CSE 6220 Collectives -- MPI
+#CSE 6220 N-Body Problem (Barnes-Hut) -- OMP
 
-In this lab, you will implement several collectives discussed in the lessons and analyze their performance.  This gives you an opportunity to solidify your understanding of the relevant algorithms and to see how latency and bandwidth considerations impact overall performance.  You will also be familiarizing yourself with the MPI (Message Passing Interface) standard, which you will use in subsequent assignments.  MPI provides a portable interface for parallel tasks running on different nodes of a cluster or supercomputer to send messages to each other.
-
-##Programming
-
-Your first task is to implement the following collectives
-
-*  Reduce  
-*  Scatter 
-*  Gather  
-*  Allgather
-*  Broadcast : Tree-Based Implementation
-*  Broadcast : Scatter-Allgather Implementation
+In this lab, you will implement a parallel version of the Barnes-Hut algorithm for solving n-body problems.  The efficiency of your code will be compared to a reference implementation to help determine your grade.
 
 ##Getting Started
+
 Begin by obtaining the starter code from the github repository.
 
 <pre><code>
@@ -24,65 +14,116 @@ Note that this is the [GT github server](https:github.gatech.edu), so you will n
 
 Optionally, you may choose use a git hosting service for your code.  As always, please **do not make your repository public** on Github or another git hosting service.  Anyone will be able to see it.  If you feel the need to use a hosting service for your project, please keep your repository private.  Your GT account allows you to create free private repositories on [the GT github server](https:github.gatech.edu).
 
-In the given files, you are to implement an interface with function of the form GT\_\<collective\>, which
-mirrors the MPI library.  Thus, GT_Bcast should do the same thing as MPI_Bcast.  In your implementation, 
-**you may only use point-to-point MPI operations.**  These are  `MPI_Send`, `MPI_Recv`, `MPI_Isend`, and `MPI_Irecv`.  Simply calling `MPI_Bcast` within your `GT_Bcast` implementation, for instance, is not allowed.
+##Part 1: Barnes-Hut Approximation for the N-Body Problem
+In classical mechanics, the [n-body problem](https://en.wikipedia.org/wiki/N-body_problem) consists of predicting the motion of celestial objects interacting through gravity.  That is, given the instantaneous positions and velocities of a group of objects at a given time, predict the gravitational forces and use these to predict the position and velocities for all future times.  
 
-Several good sources of documentation for MPI are available online.  There are several different versions and implementations; however, these differences will not be significant for our purposes.
-
-*  [OpenMPI](http://www.open-mpi.org/doc/)
-*  [MPI Forum](http://www.mpi-forum.org/docs/)
-*  [LLNL](https://computing.llnl.gov/tutorials/mpi/)
-*  [MPI Tutorial](http://mpitutorial.com/)
-
-MPI is a very general tool, and to fully implement all of its features is beyond the scope of this lab.  Therefore, you are permitted to make simplifying assumptions such as 
-
-*  the input buffers are valid memory addresses, not MPI_IN_PLACE for example.
-*  the root is zero
-*  the datatype is MPI_INT
-
-In most cases, these assumptions are documented through the `assert` statements in the starter code.
-
-##Measuring Performance
-In addition to the starter code for the MPI-like functions that you are to implement, the repository contains 
-
-*  a main file driver.c
-*  a Makefile
-*  test files of the form \< collective\>\_test.c and \< collective\>_test.h, which run some simple tests (apologies for the awkward C-style Objected-oriented and polymorphic code here)
-*  examble.pbs, an example script for submitting jobs to POD.
-
- 
-Documentation on how to submit jobs to Penguin On Demand (POD) can be found on the [POD website](https://pod.penguincomputing.com/documentation/running_mpi_Jobs).
+In a computational approach to making these predictions, the forces at a given time are calculated, and then numerical integration is used to predict the positions and velocities a short time in the future.  Repeating this process makes it possible to generate accurate predictions for celestial motion far into the future even when closed-form solutions are not possible.
 
 
-## Submitting Your Code
-When you have finished and tested your implementations, please submit them to the [Udacity site](https://www.udacity.com/course/viewer#!/c-ud281/l-4583467010/m-4623058914), which will make a quick test for correctness.  After the deadline, the TAs will pull the code and perform some timing runs to confirm that your implementation is efficient.  It is recommended that you used the strategies discussed in the lecture videos--tree-based algorithms and bucketing in particular--though you are encouraged to explore other ideas as well.
+### Task 1: N-Body Exploration
+In the first part of the lab, you are invited to explore various data sets and visualization techniques for this N-body problem.  The repository contains a complete, though woefully slow, implementation.  Later in the lab, you will work to improve its performance.
 
-# Analysis
+* An instance of the **Body** class represents one of the $n$ bodies.  It stores the body's position, velocity, and it provides functions for exerting gravitational forces and performing [leapfrog integration](https://en.wikipedia.org/wiki/Leapfrog_integration) given forces on the object.
 
-## Parameter Fitting
-In our basic model of distributed memory, we say that the time for some communication is given by $$T = \alpha + \beta n,$$ where the constant term \\(\alpha\\) represents the **latency** and the linear coefficient \\(\beta\\) represents the **inverse bandwidth** (see the lesson for details).  Given some data on communication times, your task is to fit \\(\alpha\\) and \\(\beta\\) parameters.
+* The **ForceNaive** class implements the abstract class **ForceCalculator**.  It takes an array of bodies, say $B$ as an argument to its constructor. The operator() then takes a body as an argument and applies the gravitational forces from the given set of bodies $B$.
 
-The file serial.tsv contains some measurements on the time taken to perform some point-to-point communications on the Penguin-on-Demand cluster.  Your task is to find values for the parameters \\(\alpha\\) and \\(\beta\\), so that the results curve passes close to the data on a logscale plot like the one shown below.
+* **UniverseState** is a convenience class that contains an array of $n$ bodies, a time value, and operations for file I/O.
 
-![Data points Logscale](https://s3.amazonaws.com/content.udacity-data.com/courses/gt-cse6220/project-images/fit.png)
+* The **Integrator** class handles the process of alternately computing forces and integrating positions.  After each time step it calls a user-defined callback.
 
-If you have access to gnuplot, you may modify the alpha and beta parameters at the file fit.gn to help you visualize the accuracy of your fit.  Note that a least-squares solution is not appropriate here.
+* The python files **barneshut_convert.py** and **nbody_convert.py** convert data from file formats used in a couple of labs from Princeton University into the UniverseState format.  You can find files with a small number of bodies [here](ftp://ftp.cs.princeton.edu/pub/cs126/nbody
+) and those with a large number of bodies [here](ftp://ftp.cs.princeton.edu/pub/cs126/barnes-hut/).
 
-Once you have a good fit, submit your \\(\alpha\\) and \\(\beta\\) values to the [Udacity site](https://www.udacity.com/course/viewer#!/c-ud281/l-4583467010/m-4651958566).
+* The main file **nbody.cc** accepts a file containing the initial state as a command line argument, and it outputs as csv file representing the universe state over time.
 
-## Identify the Algorithm
-
-The files bcast-alg1.tsv and bcast-alg2.tsv show timing results from two separate implementations of GT_Bcast.  One uses a tree-based algorithm, the other the scatter/allgather approach.  From the plot below, can you tell which is which?
-
-![Algorithm Comparison](https://s3.amazonaws.com/content.udacity-data.com/courses/gt-cse6220/project-images/compare.png)
-
-Write up your explanation and submit it to the [Udacity site](https://www.udacity.com/course/viewer#!/c-ud281/l-4583467010/m-4655018630).
+* The file **visualize.py** uses python's matplotlib and pandas libraries to read the data and produce a visualization.
 
 
+To illustrate the usage of this code, we'll visualize the so-called spiral system. You should first acquire the data by downloading [spiral.txt](ftp://ftp.cs.princeton.edu/pub/cs126/nbody/spiral.txt).  Then run
+
+<pre><code>
+	python nbody_convert spiral.txt > spiral.us
+</code></pre>
+to convert the file into the UniverseState format.  Then compile the nbody main file with
+<pre><code>
+	make nbody
+</code></pre>
+and run it with
+<pre><code>
+	./nbody -f spiral.us -n 50000 -s 0.01 -r 500 > spiral.csv
+</code></pre>
+Finally, you can visualize the results with 
+<pre><code>
+	python visualize.py spiral.csv
+</code></pre>
+
+There are no deliverables for this portion of the lab, but you are encouraged to explore, share tips on things like appropriate time step, share results, and share code for improved visualizations.
+
+### Task 2: Barnes-Hut Implementation
+The 'naive' computational approach to the n-body problem computes the gravitational force induced by every body to every other body. This results in $O(n^2)$ work to compute all forces for a single timestep. The Barnes-Hut algorithm reduces the complexity to $O(nlog(n))$, which makes it tractable to closely approximate solutions for problem sizes that would otherwise be prohibitively expensive. 
+
+The central idea is grouping together bodies that are sufficiently close to each other and sufficiently far from the force calculation point, and approximating the group of bodies as one body with the total group mass located at the group center of mass. 'Sufficiently close' and 'sufficiently far' are defined by a simulation parameter called the multipole acceptance criterion (MAC), usually denoted by $\theta$, which is a ratio of the group 'diameter' $d$ and the distance $r$ between the force calculation point and the group center of mass. In the figure below, diagram *B* represents a Barnes-Hut approximation of diagram *A*.
+
+![MAC]
+(https://upload.wikimedia.org/wikipedia/commons/thumb/e/e2/Barnes_hut.svg/376px-Barnes_hut.svg.png)
+
+Generally, there is a tradeoff between accuracy and speedup. The lower the MAC, the more accurate but more expensive the computation, because only smaller groups (and hence a greater number of total groups) can be used in the approximation.
+
+####Quadtrees
+To find suitable sets of bodies to group together, a Quadtree data structure is used.  This approach recursively divides square regions of $R^2$ into 4 equal sub-squares.  Thus, the root node corresponds to a square region encompassing all of the bodies and it's children correspond to the four sub-squares of equal size.  Squares with no bodies in them are pruned from the tree. 
+
+In calculating the force on a particular body, the bodies within a square are grouped together, and if approximating these bodies as a single body meets the MAC, the approximation is used.  Otherwise, the contributions from the four sub-squares are summed together.
+
+![Quadtree example]
+(https://encrypted-tbn1.gstatic.com/images?q=tbn:ANd9GcQzciGQ-YBx_XnetitdFd6x4M91lmMTWbGym9O2U1FpTonfXsc4)
+
+For 3D data, there is the analogous octree data structure.
+
+####Deliverables
+Your task for this part of the lab is to implement the Barnes-Hut approximation with a quadtree in the files *ForceBarnesHut.hh* and *ForceBarnesHut.cc.*  Your ForceBarnesHut class should inherit from ForceCalculator and define the operator () so that it can be used in place of the ForceNaive class.  You should construct the quadtree in the constructor and then use it to quickly compute the forces in the () operator member function.  The MAC parameter is specified as the variable $\theta$ to the constructor.
+
+Copy-paste your code into the Udacity site at [https://www.udacity.com/course/viewer#!/c-ud281/l-4989478591/m-5034784177](https://www.udacity.com/course/viewer#!/c-ud281/l-4989478591/m-5034784177).  The TAs will evaluate the performance of you code after the submission deadline.
+
+##Part 2: Parallel Barnes-Hut
+What could be faster than the Barnes-Hut approximation?  A parallel version, of course!  And, indeed, creating a parallel implementation of the Barnes-Hut algorithm is the next part of the lab.
+
+Given the quadtree, parallelizing the force calculation is a simple parallel loop.  Parallelizing the construction of the tree, however, is a little more challenging.  At first, the tree construction may seem like a curious thing to optimize.  In the N-body simulations that you will have done, the dominant part of the computation was the computation of the forces *after* the construction of the tree.  As the number of bodies grows, however, the share of computational time due to the construction increases.  In addition, for other applications it may be important to compute the gravitational effect of a large number of bodies, not on each other, but on a smaller set of bodies, perhaps even in real-time.  The real-time nature of the problem makes a fast Barnes-Hut approximation necessary, and it would be nice to compute the quadtree quickly so as to be sure to have the tree ready when needed.
+
+Unfortunately, building a quadtree in parallel is not merely a matter of using a parallel for loop.  Simply dividing the points among the cores would have them all attempting to modify the same quadtree creating locking or contention problems.  One could have each core build its own quadtree, but that approach leaves the problem of merging the tree together, and it's not clear why merging the trees should be much faster than constructing them in a serial fashion.
+
+<!--
+	Diagram here would be nice
+-->
+The key to fast merging of the trees is to avoid having them overlap.  If a subtree is present in one tree but entirely absent in an another, then the subtree can be added simply by marking it as a child of the appropriate node.  We want to have as much of the merge happen in this way as possible.  To achieve this, we use a MortonKey ordering of the bodies.
+
+### Task 3: Morton Ordering
+Morton order is a space-filling curve that follows a 'Z' or 'N' pattern microscopically and macroscopically. This order helps us construct our quadtree efficiently. In our code, and as is common, the pattern has the shape of an 'Z'.
+
+Consider the following image where points reside at each integral coordinate and are ordered in a Morton order starting from (7,7). The curve shape is that of a 'Z'.
+
+![Morton order]
+(https://upload.wikimedia.org/wikipedia/commons/thumb/c/c6/Morton_scan_order_8%C3%978.svg/240px-Morton_scan_order_8%C3%978.svg.png)
+
+You will notice that curves between individual points have a 'Z', but also the pattern between square regions of points are also 'Z'-shaped. The four quadrants of the whole diagram go bottom-right, bottom-left, top-right, then top-left.
+
+We can discover the Morton order by forming Morton 'keys' associated with each point, and then sorting these keys. Each key can be determined by taking integer representations of the x and y coordinates, and interleaving the bits of these integer representations. The exact values of the integer representations do not really matter, just their relative values to the other points in the domain. If our integer representations of x and y for a particular point are 10001 and 01110, respectively, then with interleaving we get the Morton key of 0110101001. Bit *i* of the x integer and bit *i* of the y integer form pair *i* in the Morton key.
+
+![Bit interleaving]
+
+After sorting the Morton keys, the points (quadtree leaves) are in the order they would appear in the quadtree.
 
 
+####Deliverables
+Using the ideas above, complete the implementation of the MortonKeyCalculator class in the files **MortonKeyCalculator.cc** and **MortonKeyCalculator.hh**.  The main file mortonsort.cc may be useful for debugging.
 
+Copy-paste your code into the Udacity site at [https://www.udacity.com/course/viewer#!/c-ud281/l-4989478591/m-5071434974](https://www.udacity.com/course/viewer#!/c-ud281/l-4989478591/m-5071434974).  The TAs will evaluate the performance of your code after the submission deadline.
 
+### Task 4: Merging Quadtrees
 
+As explained above, once the bodies are sorted, the sequence can broken down into consecutive chunks, and each chunk assigned to its own core.  If your serial implementation allocates nodes for the quadtree as they are needed, you may want to consider pre-allocating them for your parallel implementation.  Because the address space is shared among the several worker threads, memory allocation can be a bottleneck.  Regardless of your choice, the sorting by Morton keys will ensure that the resulting trees will have small overlap and can be merged quickly.  
+
+Employ this strategy in an updated implementation of the **ForceBarnesHut** class.  If you wish to use the **MortonKeyCalculator** you implement previously, you will have to include its source in these files.  Please submit your code to [https://www.udacity.com/course/viewer#!/c-ud281/l-4989478591/m-5059363626](https://www.udacity.com/course/viewer#!/c-ud281/l-4989478591/m-5059363626).
+
+## Summary
+After successfully completing this lab, you will have solid code base that will allow you to quickly approximate the net forces exerted by n bodies on an arbitrary mass in space.  This will allow you to quickly solve the n-body problem for every large instances, and your implementation will be parallel-friendly allowing it benefit where multiple processors are available.
 

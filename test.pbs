@@ -1,0 +1,14 @@
+#PBS -q FREE
+#PBS -l nodes=1:ppn=12
+#PBS -l walltime=00:05:00
+#PBS -N nbody_benchmark
+
+cd $PBS_O_WORKDIR
+
+module load gcc
+
+#export OMP_NUM_THREADS=1
+
+make benchmark
+
+./benchmark -o marks.json -n 1000000 -q 50000 -t 0.1
