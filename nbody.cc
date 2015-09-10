@@ -25,7 +25,7 @@ class CSVOutput : public OnStepComplete{
 			if (count % every ==0)
 				writeToCSV(fd_, *state, count / every);
 
-			cerr<<count<<endl;
+			//cerr<<count<<endl;
 			count++;
 		}
 
@@ -66,7 +66,7 @@ class MyForceCalculatorFactory : public ForceCalculatorFactory{
 "usage:\n"                                                                    \
 "  driver [options]\n"                                                        \
 "options:\n"                                                                  \
-"  -f [filename]       Initial conditions (Default: initial.csv)\n"           \
+"  -f [filename]       Initial conditions (Default: initial.us)\n"           \
 "  -n [nsteps]         Number of steps (Default: 60000)\n"                    \
 "  -r [nsteps]         Record once every nsteps (Default: 1000)\n"            \
 "  -s [step_size]      Earth days in step (Default: 0.003)\n"                 \
@@ -75,7 +75,7 @@ class MyForceCalculatorFactory : public ForceCalculatorFactory{
 "  -h                  Show this help message\n" 
 
 int main(int argc, char **argv){
-	const char *filename = "initial.csv";
+	const char *filename = "initial.us";
 	int nsteps = 60000; 
 	int r = 1000;
 	double h = 0.003;

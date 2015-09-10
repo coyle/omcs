@@ -31,8 +31,8 @@ class Body{
 			return fy_;
 		}
 
-		//This body exerts force on that (but not the reverse).
-		void pulls(Body *that) const;
+		//Adds gravitational force due to the body puller.
+		void accGravityFrom(Body const &puller);
 
 		//Leapfrog integration
 		void integrate(double h);

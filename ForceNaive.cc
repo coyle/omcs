@@ -8,11 +8,8 @@ ForceNaive::ForceNaive(Body *bodies, int N):
 {}
 
 void ForceNaive::operator()(Body *pulled){
-	Timer force_timer;
-	force_timer.start();
 
 	for(int i = 0; i < N_; i++)
-		bodies_[i].pulls(pulled);
+		pulled->accGravityFrom(bodies_[i]);
 
-	force_time += force_timer.stop();
 };
