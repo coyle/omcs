@@ -3,13 +3,9 @@
 #include <iostream>
 #include <fstream>
 #include <getopt.h>
+#include <omp.h>
 #include "Timer.hh"
-
-#ifdef REFSOL
-#include "ForceRefSol.hh"
-#else
 #include "ForceBarnesHut.hh"
-#endif
 
 using namespace std;
 
@@ -33,15 +29,19 @@ void makeCluster(Body *bodies, int N, double cx, double cy, double range){
 
 class ForceTest{
 	public:
-		ForceTest(int nbodies, int nqueries, double theta, unsigned int seed) : 
+		ForceTest(int nbodies, int nqueries, double theta, unsigned int seed, int max_nthreads) : 
 			nbodies_(nbodies),
 			nqueries_(nqueries),
-			theta_(theta)
+			theta_(theta),
+			seed_(seed),
+			max_nthreads_(max_nthreads)
 		{
 			double range = 2.0e-5;
+			srand(seed);
+			omp_set_num_threads(max_nthreads);
 
 			Body *bodies = new Body[nbodies];
-			srand(seed);
+
 			makeCluster(bodies, nbodies, 0.0, 0.0, range);
 
 			queries_ = new Body[nqueries];
@@ -68,6 +68,11 @@ class ForceTest{
 			os<<"{\"nbodies\": "<<nbodies_<<",\n";
 			os<<"\"nqueries\": "<<nqueries_<<",\n";
 			os<<"\"theta\": "<<theta_<<",\n";
+			os<<"\"seed\": "<<seed_<<",\n";
+			if(max_nthreads_)
+				os<<"\"max_nthreads\": "<<max_nthreads_<<",\n";
+			else
+				os<<"\"max_nthreads\": null,\n";
 			os<<"\"time_setup\": "<<time_setup_<<",\n";
   			os<<"\"time_queries\": "<<time_queries_<<",\n";
   			os<<"\"fx\": [";
@@ -92,6 +97,11 @@ class ForceTest{
 			os<<"{\"nbodies\": "<<nbodies_<<",\n";
 			os<<"\"nqueries\": "<<nqueries_<<",\n";
 			os<<"\"theta\": "<<theta_<<",\n";
+			os<<"\"seed\": "<<seed_<<",\n";
+			if(max_nthreads_)
+				os<<"\"max_nthreads\": "<<max_nthreads_<<",\n";
+			else
+				os<<"\"max_nthreads\": null,\n";
 			os<<"\"time_setup\": "<<time_setup_<<",\n";
   			os<<"\"time_queries\": "<<time_queries_<<"}\n";
  
@@ -106,8 +116,11 @@ class ForceTest{
 		int nbodies_;
 		int nqueries_;
 		double theta_;
+		unsigned int seed_;
+		int max_nthreads_;
 		double time_setup_;
 		double time_queries_;
+
 		Body *queries_;
 };
 
@@ -120,6 +133,7 @@ class ForceTest{
 "  -s [seed]           Seed for randomization (Default: 5)\n"                 \
 "  -t [theta]          Theta value for BarnesHut (Default: 0.1)\n"            \
 "  -q [nqueries]       Number of queries\n"                                   \
+"  -u [max_nthreads]   Upper limit on number of threads\n"                    \
 "  -h                  Show this help message\n" 
 
 int main(int argc, char **argv){
@@ -129,9 +143,10 @@ int main(int argc, char **argv){
 	int nqueries = 10000;
 	unsigned int seed = 5;
 	bool verbose = false;
+	int max_nthreads = 0;
 	int option_char;
 
-	while ((option_char = getopt(argc, argv, "o:n:s:t:q:vh")) != -1) {
+	while ((option_char = getopt(argc, argv, "o:n:s:t:q:u:vh")) != -1) {
 		switch (option_char) {
 		case 'o':
 			filename = optarg;
@@ -148,6 +163,9 @@ int main(int argc, char **argv){
 		case 'q':
 			nqueries = atoi(optarg);
 			break;
+		case 'u':
+			max_nthreads = atoi(optarg);
+			break;
 		case 'v':
 			verbose = true;
 			break;
@@ -161,7 +179,7 @@ int main(int argc, char **argv){
 		}
 	}
 
-	ForceTest test(nbodies, nqueries, theta, seed);
+	ForceTest test(nbodies, nqueries, theta, seed, max_nthreads);
 
 	if(filename == NULL)
 		if(verbose)

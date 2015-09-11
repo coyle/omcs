@@ -108,13 +108,13 @@ You will notice that curves between individual points have a 'Z', but also the p
 
 We can discover the Morton order by forming Morton 'keys' associated with each point, and then sorting these keys. Each key can be determined by taking integer representations of the x and y coordinates, and interleaving the bits of these integer representations. The exact values of the integer representations do not really matter, just their relative values to the other points in the domain. If our integer representations of x and y for a particular point are 10001 and 01110, respectively, then with interleaving we get the Morton key of 0110101001. Bit *i* of the x integer and bit *i* of the y integer form pair *i* in the Morton key.
 
-![Bit interleaving]
+![Bit interleaving](https://s3.amazonaws.com/content.udacity-data.com/courses/gt-cse6220/resources/bit_interleaving.png)
 
 After sorting the Morton keys, the points (quadtree leaves) are in the order they would appear in the quadtree.
 
 
 ####Deliverables
-Using the ideas above, complete the implementation of the MortonKeyCalculator class in the files **MortonKeyCalculator.cc** and **MortonKeyCalculator.hh**.  The main file mortonsort.cc may be useful for debugging.
+Using the ideas above, complete the implementation of the MortonKeyCalculator class in the files **MortonKeyCalculator.cc** and **MortonKeyCalculator.hh**.  You should make your implementation parallel.  Thankfully, gcc makes this easy with its builtin [parallel mode](https://gcc.gnu.org/onlinedocs/libstdc++/manual/parallel_mode_using.html).  You should use the method of "Using Specific Parallel Components."  The main file mortonsort.cc may be useful for debugging.
 
 Copy-paste your code into the Udacity site at [https://www.udacity.com/course/viewer#!/c-ud281/l-4989478591/m-5071434974](https://www.udacity.com/course/viewer#!/c-ud281/l-4989478591/m-5071434974).  The TAs will evaluate the performance of your code after the submission deadline.
 
