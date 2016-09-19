@@ -7,7 +7,7 @@ In this lab, you will implement a parallel version of the Barnes-Hut algorithm f
 Begin by obtaining the starter code from the github repository.
 
 <pre><code>
-	git clone https://github.gatech.edu/sb300/oms-hpc-lab2.git
+	git clone --recursive https://github.gatech.edu/sb300/oms-hpc-lab2.git
 </code></pre>
 
 Note that this is the [GT github server](https:github.gatech.edu), so you will need to authenticate with your GT credentials.
