@@ -82,7 +82,6 @@ For 3D data, there is the analogous octree data structure.
 ####Deliverables
 Your task for this part of the lab is to implement the Barnes-Hut approximation with a quadtree in the files *ForceBarnesHut.hh* and *ForceBarnesHut.cc.*  Your ForceBarnesHut class should inherit from ForceCalculator and define the operator () so that it can be used in place of the ForceNaive class.  You should construct the quadtree in the constructor and then use it to quickly compute the forces in the () operator member function.  The MAC parameter is specified as the variable $\theta$ to the constructor.
 
-Copy-paste your code into the Udacity site at [https://www.udacity.com/course/viewer#!/c-ud281/l-4989478591/m-5034784177](https://www.udacity.com/course/viewer#!/c-ud281/l-4989478591/m-5034784177).  The TAs will evaluate the performance of you code after the submission deadline.
 
 ##Part 2: Parallel Barnes-Hut
 What could be faster than the Barnes-Hut approximation?  A parallel version, of course!  And, indeed, creating a parallel implementation of the Barnes-Hut algorithm is the next part of the lab.
@@ -116,14 +115,19 @@ After sorting the Morton keys, the points (quadtree leaves) are in the order the
 ####Deliverables
 Using the ideas above, complete the implementation of the MortonKeyCalculator class in the files **MortonKeyCalculator.cc** and **MortonKeyCalculator.hh**.  You should make your implementation parallel.  Thankfully, gcc makes this easy with its builtin [parallel mode](https://gcc.gnu.org/onlinedocs/libstdc++/manual/parallel_mode_using.html).  You should use the method of "Using Specific Parallel Components."  The main file mortonsort.cc may be useful for debugging.
 
-Copy-paste your code into the Udacity site at [https://www.udacity.com/course/viewer#!/c-ud281/l-4989478591/m-5071434974](https://www.udacity.com/course/viewer#!/c-ud281/l-4989478591/m-5071434974).  The TAs will evaluate the performance of your code after the submission deadline.
 
 ### Task 4: Merging Quadtrees
 
 As explained above, once the bodies are sorted, the sequence can broken down into consecutive chunks, and each chunk assigned to its own core.  If your serial implementation allocates nodes for the quadtree as they are needed, you may want to consider pre-allocating them for your parallel implementation.  Because the address space is shared among the several worker threads, memory allocation can be a bottleneck.  Regardless of your choice, the sorting by Morton keys will ensure that the resulting trees will have small overlap and can be merged quickly.  
 
-Employ this strategy in an updated implementation of the **ForceBarnesHut** class.  If you wish to use the **MortonKeyCalculator** you implement previously, you will have to include its source in these files.  Please submit your code to [https://www.udacity.com/course/viewer#!/c-ud281/l-4989478591/m-5059363626](https://www.udacity.com/course/viewer#!/c-ud281/l-4989478591/m-5059363626).
+Employ this strategy in an updated implementation of the **ForceBarnesHut** class.  If you wish to use the **MortonKeyCalculator** you implement previously, you will have to include its source in these files.
 
 ## Summary
 After successfully completing this lab, you will have solid code base that will allow you to quickly approximate the net forces exerted by n bodies on an arbitrary mass in space.  This will allow you to quickly solve the n-body problem for every large instances, and your implementation will be parallel-friendly allowing it benefit where multiple processors are available.
 
+###Submitting Your Code
+Once you have completed and tested your implementations, please submit using the **submit.py** script, 
+<pre><code>
+	python submit.py
+</code></pre>
+which will do a quick correctness test.  You may submit as many times as you like before the deadline.  At the deadline, the TA will download the code and perform some timing runs.  These results along with a manual inspection of the code will determine your grade.
