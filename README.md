@@ -42,7 +42,7 @@ In the first part of the lab, you are invited to explore various data sets and v
 To illustrate the usage of this code, we'll visualize the so-called spiral system. You should first acquire the data by downloading [spiral.txt](ftp://ftp.cs.princeton.edu/pub/cs126/nbody/spiral.txt).  Then run
 
 <pre><code>
-	python nbody_convert spiral.txt > spiral.us
+	python nbody_convert.py spiral.txt > spiral.us
 </code></pre>
 to convert the file into the UniverseState format.  Then compile the nbody main file with
 <pre><code>
