@@ -125,6 +125,28 @@ Employ this strategy in an updated implementation of the **ForceBarnesHut** clas
 ## Summary
 After successfully completing this lab, you will have solid code base that will allow you to quickly approximate the net forces exerted by n bodies on an arbitrary mass in space.  This will allow you to quickly solve the n-body problem for every large instances, and your implementation will be parallel-friendly allowing it benefit where multiple processors are available.
 
+## Benchmark Output
+The benchmark executable outputs timing results in JSON format. Each of the field names are described below. 
+
+"nbodies": input parameter, number of gravitational bodies in the simulation.  
+"nqueries": input parameter, the number of single-body force computations.  
+"theta": input parameter, the multipole acceptance criterion.  
+"seed": input parameter, random seed.  
+"max_nthreads": should be set to 32 for benchmarking purposes.  
+"time_setup": The time in seconds required to sort the Morton keys and construct the quadtree.  
+"time_queries": The time in seconds required to perform 'nqueries' computations.
+## Expected Timings
+Since reference sequential implementations were not provided, only target parallel timings will be provided.
+The following timings were obtained with "nqueries" >= 10000, "theta" = 0.1, "seed" = 5, "max_nthreads" = 32.
+
+time_setup:  
+  "nbodies" = 1e6: ~ 0.15 seconds  
+  "nbodies" = 1e7: ~ 1.75 seconds  
+
+time_queries:  
+  "nbodies" = 1e6: ~ 50 microseconds / query  
+  "nbodies" = 1e7: ~ 80 microseconds / query  
+
 ###Submitting Your Code
 Once you have completed and tested your implementations, please submit using the **submit.py** script, 
 <pre><code>
