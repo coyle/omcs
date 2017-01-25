@@ -23,7 +23,7 @@ In a computational approach to making these predictions, the forces at a given t
 ### Task 1: N-Body Exploration
 In the first part of the lab, you are invited to explore various data sets and visualization techniques for this N-body problem.  The repository contains a complete, though woefully slow, implementation.  Later in the lab, you will work to improve its performance.
 
-* An instance of the **Body** class represents one of the $n$ bodies.  It stores the body's position, velocity, and it provides functions for exerting gravitational forces and performing [leapfrog integration](https://en.wikipedia.org/wiki/Leapfrog_integration) given forces on the object.
+* An instance of the **Body** class represents one of the $n$ bodies.  It stores the body's position, velocity, mass, and it provides functions for exerting gravitational forces and performing [leapfrog integration](https://en.wikipedia.org/wiki/Leapfrog_integration) given forces on the object.
 
 * The **ForceNaive** class implements the abstract class **ForceCalculator**.  It takes an array of bodies, say $B$ as an argument to its constructor. The operator() then takes a body as an argument and applies the gravitational forces from the given set of bodies $B$.
 
