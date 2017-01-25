@@ -23,20 +23,25 @@ In a computational approach to making these predictions, the forces at a given t
 ### Task 1: N-Body Exploration
 In the first part of the lab, you are invited to explore various data sets and visualization techniques for this N-body problem.  The repository contains a complete, though woefully slow, implementation.  Later in the lab, you will work to improve its performance.
 
-* An instance of the **Body** class represents one of the $n$ bodies.  It stores the body's position, velocity, mass, and it provides functions for exerting gravitational forces and performing [leapfrog integration](https://en.wikipedia.org/wiki/Leapfrog_integration) given forces on the object.
+* Classes:
 
-* The **ForceNaive** class implements the abstract class **ForceCalculator**.  It takes an array of bodies, say $B$ as an argument to its constructor. The operator() then takes a body as an argument and applies the gravitational forces from the given set of bodies $B$.
+	* An instance of the **Body** class represents one of the $n$ bodies.  It stores the body's position, velocity, mass, and it provides functions for exerting gravitational forces and performing [leapfrog integration](https://en.wikipedia.org/wiki/Leapfrog_integration) given forces on the object.
 
-* **UniverseState** is a convenience class that contains an array of $n$ bodies, a time value, and operations for file I/O.
+	* The **ForceNaive** class implements the abstract class **ForceCalculator**.  It takes an array of bodies, say $B$ as an argument to its constructor. The operator() then takes a body as an argument and applies the gravitational forces from the given set of bodies $B$.
 
-* The **Integrator** class handles the process of alternately computing forces and integrating positions.  After each time step it calls a user-defined callback.
+	* **UniverseState** is a convenience class that contains an array of $n$ bodies, a time value, and operations for file I/O.
 
-* The python files **barneshut_convert.py** and **nbody_convert.py** convert data from file formats used in a couple of labs from Princeton University into the UniverseState format.  You can find files with a small number of bodies [here](ftp://ftp.cs.princeton.edu/pub/cs126/nbody
+	* The **Integrator** class handles the process of alternately computing forces and integrating positions.  After each time step it calls a user-defined callback.
+
+* Python files:
+	* The python files **barneshut_convert.py** and **nbody_convert.py** convert data from file formats used in a couple of labs from Princeton University into the UniverseState format.  You can find files with a small number of bodies [here](ftp://ftp.cs.princeton.edu/pub/cs126/nbody
 ) and those with a large number of bodies [here](ftp://ftp.cs.princeton.edu/pub/cs126/barnes-hut/).
+	* The file **visualize.py** uses python's matplotlib and pandas libraries to read the output csv data from **nbody.cc** and produce a visualization.
+	
+* Main program:
+	* The main file **nbody.cc** accepts a file containing the initial state as a command line argument, and it outputs as csv file representing the universe state over time. Type `./nbody --help or -h` to get more arguments and their default values.
+	* Its execution process: (TODO).
 
-* The main file **nbody.cc** accepts a file containing the initial state as a command line argument, and it outputs as csv file representing the universe state over time. Type `./nbody --help or -h` to get more arguments and their default values.
-
-* The file **visualize.py** uses python's matplotlib and pandas libraries to read the data and produce a visualization.
 
 
 To illustrate the usage of this code, we'll visualize the so-called spiral system. You should first acquire the data by downloading [spiral.txt](ftp://ftp.cs.princeton.edu/pub/cs126/nbody/spiral.txt).  Then run
@@ -57,7 +62,7 @@ Finally, you can visualize the results with
 	python visualize.py spiral.csv
 </code></pre>
 
-There are no deliverables for this portion of the lab, but you are encouraged to explore, share tips on things like appropriate time step, share results, and share code for improved visualizations.
+There are no deliverables for this portion of the lab, but understanding this portion thoroughly is extremely important for Part 2. You are encouraged to explore, share tips on things like appropriate time step, share results, and share code for improved visualizations.
 
 ### Task 2: Barnes-Hut Implementation
 The 'naive' computational approach to the n-body problem computes the gravitational force induced by every body to every other body. This results in $O(n^2)$ work to compute all forces for a single timestep. The Barnes-Hut algorithm reduces the complexity to $O(nlog(n))$, which makes it tractable to closely approximate solutions for problem sizes that would otherwise be prohibitively expensive. 
