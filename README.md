@@ -34,7 +34,7 @@ In the first part of the lab, you are invited to explore various data sets and v
 * The python files **barneshut_convert.py** and **nbody_convert.py** convert data from file formats used in a couple of labs from Princeton University into the UniverseState format.  You can find files with a small number of bodies [here](ftp://ftp.cs.princeton.edu/pub/cs126/nbody
 ) and those with a large number of bodies [here](ftp://ftp.cs.princeton.edu/pub/cs126/barnes-hut/).
 
-* The main file **nbody.cc** accepts a file containing the initial state as a command line argument, and it outputs as csv file representing the universe state over time.
+* The main file **nbody.cc** accepts a file containing the initial state as a command line argument, and it outputs as csv file representing the universe state over time. Type `./nbody --help or -h` to get more arguments and their default values.
 
 * The file **visualize.py** uses python's matplotlib and pandas libraries to read the data and produce a visualization.
 
