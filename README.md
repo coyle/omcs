@@ -23,23 +23,21 @@ In a computational approach to making these predictions, the forces at a given t
 ### Task 1: N-Body Exploration
 In the first part of the lab, you are invited to explore various data sets and visualization techniques for this N-body problem.  The repository contains a complete, though woefully slow, implementation.  Later in the lab, you will work to improve its performance.
 
-* Classes:
+* An instance of the **Body** class represents one of the $n$ bodies.  It stores the body's position, velocity, mass, and it provides functions for exerting gravitational forces and performing [leapfrog integration](https://en.wikipedia.org/wiki/Leapfrog_integration) given forces on the object to update its position and velocity.
 
-	* An instance of the **Body** class represents one of the $n$ bodies.  It stores the body's position, velocity, mass, and it provides functions for exerting gravitational forces and performing [leapfrog integration](https://en.wikipedia.org/wiki/Leapfrog_integration) given forces on the object to update its position and velocity.
+* The **ForceNaive** class implements the abstract class **ForceCalculator**.  It takes an array of $n$ bodies, say $B$ as an argument to its constructor. The operator() then takes a body as an argument and applies the gravitational forces from the given set of bodies $B$.
 
-	* The **ForceNaive** class implements the abstract class **ForceCalculator**.  It takes an array of $n$ bodies, say $B$ as an argument to its constructor. The operator() then takes a body as an argument and applies the gravitational forces from the given set of bodies $B$.
+* **UniverseState** is a convenience class that contains an array of $n$ bodies, a time value, and operations for file I/O.
 
-	* **UniverseState** is a convenience class that contains an array of $n$ bodies, a time value, and operations for file I/O.
+* The **Integrator** class handles the process of alternately computing forces and integrating positions given the number of steps and the step size.  After each time step it calls a user-defined callback.
 
-	* The **Integrator** class handles the process of alternately computing forces and integrating positions given the number of steps and the step size.  After each time step it calls a user-defined callback.
-
-* Python files:
-	* The python files **barneshut_convert.py** and **nbody_convert.py** convert data from file formats used in a couple of labs from Princeton University into the UniverseState format.  You can find files with a small number of bodies [here](ftp://ftp.cs.princeton.edu/pub/cs126/nbody
+* The python files **barneshut_convert.py** and **nbody_convert.py** convert data from file formats used in a couple of labs from Princeton University into the UniverseState format.  You can find files with a small number of bodies [here](ftp://ftp.cs.princeton.edu/pub/cs126/nbody
 ) and those with a large number of bodies [here](ftp://ftp.cs.princeton.edu/pub/cs126/barnes-hut/).
-	* The file **visualize.py** uses python's matplotlib and pandas libraries to read the output csv data from **nbody.cc** and produce a visualization.
-	
-* Main program:
-	* The main file **nbody.cc** accepts a file containing the initial state as a command line argument, and it outputs as csv file representing the universe state over time. Type `./nbody --help or -h` to get more arguments and their default values.
+
+* The main file **nbody.cc** accepts a file containing the initial state as a command line argument, and it outputs as csv file representing the universe state over time. Type `./nbody --help or -h` to get more arguments and their default values.
+
+* The file **visualize.py** uses python's matplotlib and pandas libraries to read the output csv data and produce a visualization.
+
 
 
 
