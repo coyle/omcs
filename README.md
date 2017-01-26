@@ -74,7 +74,7 @@ Generally, there is a tradeoff between accuracy and speedup. The lower the MAC, 
 ####Quadtrees
 To find suitable sets of bodies to group together, a Quadtree data structure is used.  This approach recursively divides square regions of $R^2$ into 4 equal sub-squares.  Thus, the root node corresponds to a square region encompassing all of the bodies and it's children correspond to the four sub-squares of equal size.  Squares with no bodies in them are pruned from the tree. 
 
-In calculating the force on a particular body, the bodies within a square are grouped together, and if approximating these bodies as a single body meets the MAC, the approximation is used.  Otherwise, the contributions from the four sub-squares are summed together.
+In calculating the force on a particular body, the bodies within a square are grouped together, and if approximating these bodies as a single body meets the MAC (smaller than $\theta$), the approximation is used.  Otherwise, the contributions from the four sub-squares are summed together.
 
 ![Quadtree example]
 (https://encrypted-tbn1.gstatic.com/images?q=tbn:ANd9GcQzciGQ-YBx_XnetitdFd6x4M91lmMTWbGym9O2U1FpTonfXsc4)
