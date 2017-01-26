@@ -116,7 +116,7 @@ After sorting the Morton keys, the points (quadtree leaves) are in the order the
 
 
 ####Deliverables
-Using the ideas above, complete the implementation of the MortonKeyCalculator class in the files **MortonKeyCalculator.cc** and **MortonKeyCalculator.hh**.  You should make your implementation parallel.  Thankfully, gcc makes this easy with its builtin [parallel mode](https://gcc.gnu.org/onlinedocs/libstdc++/manual/parallel_mode_using.html).  You should use the method of "Using Specific Parallel Components."  The main file mortonsort.cc may be useful for debugging.
+Using the ideas above, complete the implementation of the MortonKeyCalculator class in the files **MortonKeyCalculator.cc** and **MortonKeyCalculator.hh**.  You should make your implementation parallel.  Thankfully, gcc makes this easy with its builtin [parallel mode](https://gcc.gnu.org/onlinedocs/libstdc++/manual/parallel_mode_using.html).  You should use the method of "Using Specific Parallel Components."  The main file mortonsort.cc may be useful for debugging, which can be compiled by `make mortonsort` and run independently.
 
 
 ### Task 4: Merging Quadtrees
@@ -129,8 +129,27 @@ Employ this strategy in an updated implementation of the **ForceBarnesHut** clas
 ## Summary
 After successfully completing this lab, you will have solid code base that will allow you to quickly approximate the net forces exerted by n bodies on an arbitrary mass in space.  This will allow you to quickly solve the n-body problem for every large instances, and your implementation will be parallel-friendly allowing it benefit where multiple processors are available.
 
-## Benchmark Output
-The benchmark executable outputs timing results in JSON format. Each of the field names are described below. 
+
+## Benchmarking
+
+### Performance Testing
+You should measure the performance of your code on the Deepthought cluster. The file benchmark.cc performs the tests and compile it with
+
+<pre><code>
+	make benchmark
+</code></pre>
+
+The file test.sub serves as an example for how to use sbatch.  Thus, to measure the performance of you code you should run
+
+<pre><code>
+	sbatch test.sub
+</code></pre>
+
+from your Deepthought login node.
+
+
+### Output format
+The benchmark executable outputs timing results in JSON format (`marks.json`). Each of the field names are described below. 
 
 "nbodies": input parameter, number of gravitational bodies in the simulation.  
 "nqueries": input parameter, the number of single-body force computations.  
