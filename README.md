@@ -25,13 +25,13 @@ In the first part of the lab, you are invited to explore various data sets and v
 
 * Classes:
 
-	* An instance of the **Body** class represents one of the $n$ bodies.  It stores the body's position, velocity, mass, and it provides functions for exerting gravitational forces and performing [leapfrog integration](https://en.wikipedia.org/wiki/Leapfrog_integration) given forces on the object.
+	* An instance of the **Body** class represents one of the $n$ bodies.  It stores the body's position, velocity, mass, and it provides functions for exerting gravitational forces and performing [leapfrog integration](https://en.wikipedia.org/wiki/Leapfrog_integration) given forces on the object to update its position and velocity.
 
-	* The **ForceNaive** class implements the abstract class **ForceCalculator**.  It takes an array of bodies, say $B$ as an argument to its constructor. The operator() then takes a body as an argument and applies the gravitational forces from the given set of bodies $B$.
+	* The **ForceNaive** class implements the abstract class **ForceCalculator**.  It takes an array of $n$ bodies, say $B$ as an argument to its constructor. The operator() then takes a body as an argument and applies the gravitational forces from the given set of bodies $B$.
 
 	* **UniverseState** is a convenience class that contains an array of $n$ bodies, a time value, and operations for file I/O.
 
-	* The **Integrator** class handles the process of alternately computing forces and integrating positions.  After each time step it calls a user-defined callback.
+	* The **Integrator** class handles the process of alternately computing forces and integrating positions given the number of steps and the step size.  After each time step it calls a user-defined callback.
 
 * Python files:
 	* The python files **barneshut_convert.py** and **nbody_convert.py** convert data from file formats used in a couple of labs from Princeton University into the UniverseState format.  You can find files with a small number of bodies [here](ftp://ftp.cs.princeton.edu/pub/cs126/nbody
@@ -40,7 +40,6 @@ In the first part of the lab, you are invited to explore various data sets and v
 	
 * Main program:
 	* The main file **nbody.cc** accepts a file containing the initial state as a command line argument, and it outputs as csv file representing the universe state over time. Type `./nbody --help or -h` to get more arguments and their default values.
-	* Its execution process: (TODO).
 
 
 
