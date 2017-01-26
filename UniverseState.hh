@@ -21,8 +21,6 @@ class UniverseState{
 		//Mutators
 		inline void set_t(double t){t_ = t;}
 
-		void writeToFile(ostream& os);
-
 		~UniverseState();
 
 	private:
