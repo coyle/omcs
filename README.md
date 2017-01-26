@@ -61,6 +61,7 @@ Finally, you can visualize the results with
 
 There are no deliverables for this portion of the lab, but understanding this portion thoroughly is extremely important for Part 2. You are encouraged to explore, share tips on things like appropriate time step, share results, and share code for improved visualizations.
 
+
 ### Task 2: Barnes-Hut Implementation
 The 'naive' computational approach to the n-body problem computes the gravitational force induced by every body to every other body. This results in $O(n^2)$ work to compute all forces for a single timestep. The Barnes-Hut algorithm reduces the complexity to $O(nlog(n))$, which makes it tractable to closely approximate solutions for problem sizes that would otherwise be prohibitively expensive. 
 
@@ -82,7 +83,7 @@ In calculating the force on a particular body, the bodies within a square are gr
 For 3D data, there is the analogous octree data structure.
 
 ####Deliverables
-Your task for this part of the lab is to implement the Barnes-Hut approximation with a quadtree in the files *ForceBarnesHut.hh* and *ForceBarnesHut.cc.*  Your ForceBarnesHut class should inherit from ForceCalculator and define the operator () so that it can be used in place of the ForceNaive class.  You should construct the quadtree in the constructor and then use it to quickly compute the forces in the () operator member function.  The MAC parameter is specified as the variable $\theta$ to the constructor.
+Your task for this part of the lab is to implement the Barnes-Hut approximation with a quadtree in the files **ForceBarnesHut.hh** and **ForceBarnesHut.cc**.  Your ForceBarnesHut class should inherit from ForceCalculator and define the operator () so that it can be used in place of the ForceNaive class.  You should construct the quadtree in the constructor and then use it to quickly compute the forces in the () operator member function.  The MAC parameter is specified as the variable $\theta$ to the constructor.
 
 
 ##Part 2: Parallel Barnes-Hut
@@ -122,7 +123,8 @@ Using the ideas above, complete the implementation of the MortonKeyCalculator cl
 
 As explained above, once the bodies are sorted, the sequence can broken down into consecutive chunks, and each chunk assigned to its own core.  If your serial implementation allocates nodes for the quadtree as they are needed, you may want to consider pre-allocating them for your parallel implementation.  Because the address space is shared among the several worker threads, memory allocation can be a bottleneck.  Regardless of your choice, the sorting by Morton keys will ensure that the resulting trees will have small overlap and can be merged quickly.  
 
-Employ this strategy in an updated implementation of the **ForceBarnesHut** class.  If you wish to use the **MortonKeyCalculator** you implement previously, you will have to include its source in these files.
+####Deliverables
+Employ this strategy in an updated implementation of the **ForceBarnesHut** class in **ForceBarnesHut.hh** and **ForceBarnesHut.cc** files. You can use `"_OPENMP"` macro to separate OpenMP parallel codes with sequential codes you implement for Task 2. If you wish to use the **MortonKeyCalculator** you implement previously, you will have to include its source in these files.
 
 ## Summary
 After successfully completing this lab, you will have solid code base that will allow you to quickly approximate the net forces exerted by n bodies on an arbitrary mass in space.  This will allow you to quickly solve the n-body problem for every large instances, and your implementation will be parallel-friendly allowing it benefit where multiple processors are available.
@@ -138,8 +140,8 @@ The benchmark executable outputs timing results in JSON format. Each of the fiel
 "time_setup": The time in seconds required to sort the Morton keys and construct the quadtree.  
 "time_queries": The time in seconds required to perform 'nqueries' computations.
 ## Expected Timings
-Since reference sequential implementations were not provided, only target parallel timings will be provided.
-The following timings were obtained with "nqueries" >= 10000, "theta" = 0.1, "seed" = 5, "max_nthreads" = 32.
+Since reference sequential Barnes-Hut implementation were not provided, only target parallel timings will be provided.
+You can test the naive implementation to check out the benefit of Barnes-Hut algorithm. The following timings were obtained with "nqueries" >= 10000, "theta" = 0.1, "seed" = 5, "max_nthreads" = 32.
 
 time_setup:  
   "nbodies" = 1e6: ~ 0.15 seconds  
