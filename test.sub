@@ -1,0 +1,19 @@
+#!/bin/bash
+
+#SBATCH -A class
+#SBATCH -N 1
+#SBATCH --exclusive
+#SBATCH --time=00:05:00
+
+#SBATCH -J nbody_benchmark
+#SBATCH --error=job.%J.err
+#SBATCH --output=job.%J.out
+
+
+#export OMP_NUM_THREADS=32
+
+make clean
+make benchmark
+
+./benchmark -o marks.json -n 10000000 -q 10000 -s 5 -t 0.1 -u 32
+

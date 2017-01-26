@@ -36,5 +36,5 @@ bool MortonKeyCalculator::operator() (const Body &a, const Body &b) const{
 	//Return true is a is less than b in a Morton Key ordering; 
 	//otherwise, return false.
 
-
+	return true;
 }

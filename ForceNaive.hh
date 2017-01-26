@@ -7,7 +7,7 @@
 class ForceNaive : public ForceCalculator {
 
 	public:
-		ForceNaive(Body *body, int N);
+		ForceNaive(Body *bodies, int N);
 
 		virtual void operator() (Body *pulled);
 

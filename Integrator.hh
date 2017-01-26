@@ -7,6 +7,7 @@
 class ForceCalculatorFactory{
 	public:
 		virtual ForceCalculator* operator()(Body *bodies, int N) = 0;
+		virtual ~ForceCalculatorFactory(){};
 };
 
 class OnStepComplete {
