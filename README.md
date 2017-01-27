@@ -31,8 +31,7 @@ In the first part of the lab, you are invited to explore various data sets and v
 
 * The **Integrator** class handles the process of alternately computing forces and integrating positions given the number of steps and the step size.  After each time step it calls a user-defined callback.
 
-* The python files **barneshut_convert.py** and **nbody_convert.py** convert data from file formats used in a couple of labs from Princeton University into the UniverseState format.  You can find files with a small number of bodies [here](ftp://ftp.cs.princeton.edu/pub/cs126/nbody
-) and those with a large number of bodies [here](ftp://ftp.cs.princeton.edu/pub/cs126/barnes-hut/).
+* The python files **barneshut_convert.py** and **nbody_convert.py** convert data from file formats used in a couple of labs from Princeton University into the UniverseState format.  You can find files with a small number of bodies [here](http://bit.ly/2kBqI0F) and those with a large number of bodies [here](http://bit.ly/2ktO88X).
 
 * The main file **nbody.cc** accepts a file containing the initial state as a command line argument, and it outputs as csv file representing the universe state over time. Type `./nbody --help or -h` to get more arguments and their default values.
 
