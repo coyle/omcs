@@ -40,7 +40,7 @@ In the first part of the lab, you are invited to explore various data sets and v
 
 
 
-To illustrate the usage of this code, we'll visualize the so-called spiral system. You should first acquire the data by downloading [spiral.txt](ftp://ftp.cs.princeton.edu/pub/cs126/nbody/spiral.txt).  Then run
+To illustrate the usage of this code, we'll visualize the so-called spiral system. You should first acquire the data by downloading [spiral.txt](http://bit.ly/2jZJa3X).  Then run
 
 <pre><code>
 	python nbody_convert.py spiral.txt > spiral.us
