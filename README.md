@@ -42,7 +42,7 @@ In the first part of the lab, you are invited to explore various data sets and v
 
 To illustrate the usage of this code, we'll visualize the so-called spiral system. You should first acquire the data by downloading [spiral.txt](http://bit.ly/2jZJa3X).  Then run
 
-> Note: You may need to rename the file: mv 2jZJa3X spiral.txt
+> Note: You may need to rename the file from jZJa3X to spiral.txt
 
 <pre><code>
 	python nbody_convert.py spiral.txt > spiral.us
