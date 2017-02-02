@@ -10,9 +10,9 @@ Begin by obtaining the starter code from the github repository.
     git clone --recursive https://github.gatech.edu/omscse6220/lab2.git
 </code></pre>
 
-Note that this is the [GT github server](https:github.gatech.edu), so you will need to authenticate with your GT credentials.
+Note that this is the [GT github server](https://github.gatech.edu), so you will need to authenticate with your GT credentials.
 
-Optionally, you may choose use a git hosting service for your code.  As always, please **do not make your repository public** on Github or another git hosting service.  Anyone will be able to see it.  If you feel the need to use a hosting service for your project, please keep your repository private.  Your GT account allows you to create free private repositories on [the GT github server](https:github.gatech.edu).
+Optionally, you may choose use a git hosting service for your code.  As always, please **do not make your repository public** on Github or another git hosting service.  Anyone will be able to see it.  If you feel the need to use a hosting service for your project, please keep your repository private.  Your GT account allows you to create free private repositories on [the GT github server](https://github.gatech.edu).
 
 ##Part 1: Barnes-Hut Approximation for the N-Body Problem
 In classical mechanics, the [n-body problem](https://en.wikipedia.org/wiki/N-body_problem) consists of predicting the motion of celestial objects interacting through gravity.  That is, given the instantaneous positions and velocities of a group of objects at a given time, predict the gravitational forces and use these to predict the position and velocities for all future times.  
